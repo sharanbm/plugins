@@ -19,7 +19,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
-<table id="target_table_id">
+<table id="target_table_id" border="1">
+    <thead>
+    <tr>
+        <td>Site Name</td>
+        <td>Site URL</td>
+    </tr>
+    </thead>
     <tbody></tbody>
 </table>
 
@@ -31,7 +37,7 @@
 
         $.each(${groupsList}, function (k, v) {
             var tbl_row = "";
-            tbl_row += "<td>" + v.name + "</td>";
+            tbl_row += "<td>" + v.name + "</td><td>" + v.friendlyURL + "</td>";
             tbl_body += "<tr class=\"" + ( odd_even ? "odd" : "even") + "\">" + tbl_row + "</tr>";
             odd_even = !odd_even;
         })
