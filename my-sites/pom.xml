@@ -137,16 +137,4 @@
 			<version>${spring-version}</version>
 		</dependency>
 	</dependencies>
-
-	<properties>
-		<liferay.version>6.2.5</liferay.version>
-		<spring-version>4.3.9.RELEASE</spring-version>
-		<liferay.app.server.portal.dir>C:\apps\lrga5\liferay-portal-6.2-ce-ga5\tomcat-7.0.62\webapps\ROOT</liferay.app.server.portal.dir>
-		<liferay.app.server.lib.global.dir>C:\apps\lrga5\liferay-portal-6.2-ce-ga5\tomcat-7.0.62\lib\ext
-		</liferay.app.server.lib.global.dir>
-		<liferay.auto.deploy.dir>C:\apps\lrga5\liferay-portal-6.2-ce-ga5\deploy</liferay.auto.deploy.dir>
-		<liferay.app.server.deploy.dir>C:\apps\lrga5\liferay-portal-6.2-ce-ga5\tomcat-7.0.62\webapps
-		</liferay.app.server.deploy.dir>
-		<liferay.maven.plugin.version>6.2.5</liferay.maven.plugin.version>
-	</properties>
 </project>
