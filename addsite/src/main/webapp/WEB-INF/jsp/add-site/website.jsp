@@ -14,7 +14,7 @@
 			</div>
 			<div class="modal-body">
 				<p>Some text in the modal.</p>
-				<b>${createSite}</b>
+
 				<form name="createSite" id="createSite" action="${createSite}" method="post">
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="layout_groupsList">Site Name:</label>
