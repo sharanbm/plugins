@@ -1,0 +1,226 @@
+/* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
+.aui body.two-mins {
+  background-color: #fff !important;
+  color: #575761 !important;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  margin: 0 !important; }
+
+html .aui {
+  background-color: #fff !important; }
+
+.container-table {
+  display: table; }
+
+.vertical-center-row {
+  display: table-cell;
+  vertical-align: middle; }
+
+.twomins-middle {
+  margin-top: 100px;
+  margin-bottom: 100px; }
+
+.css-script-center {
+  width: 960px;
+  margin: 0 auto; }
+
+.css-script-center ul {
+  width: 212px;
+  float: left;
+  line-height: 45px;
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.css-script-center a {
+  text-decoration: none; }
+
+.css-script-ads {
+  width: 728px;
+  height: 90px;
+  float: right; }
+
+.css-script-clear {
+  clear: both;
+  height: 0; }
+
+.nav-container {
+  width: 550px;
+  height: 600px;
+  display: block;
+  margin: auto;
+  position: relative; }
+
+h1 {
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  color: #f1c40f; }
+
+.actionTitle {
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 200;
+  color: #f1c40f;
+  margin-left: 36px;
+  top: 90px;
+  position: relative; }
+
+.nav-container .container a:HOVER {
+  text-decoration: none;
+  text-transform: uppercase; }
+
+.nav-container .container a:VISITED {
+  text-decoration: none;
+  color: #f1c40f; }
+
+.menu_opener {
+  display: none; }
+
+.menu_opener:checked ~ .link_blog {
+  top: 45px; }
+
+.menu_opener:checked ~ .link_website {
+  left: 425px; }
+
+.menu_opener:checked ~ .link_settings {
+  top: 345px;
+  left: 345px; }
+
+.menu_opener:checked ~ .link_pages {
+  top: 125px;
+  left: 345px; }
+
+.menu_opener:checked ~ .link_layout {
+  left: 75px;
+  top: 365px; }
+
+.menu_opener:checked ~ .link_content {
+  left: 30px; }
+
+.menu_opener:checked ~ .link_media {
+  left: 75px;
+  top: 101px; }
+
+.menu_opener:checked ~ .link_users {
+  top: 425px; }
+
+.menu_opener:checked ~ .barre_hamburger {
+  opacity: 0; }
+
+.menu_opener:checked ~ .menu_opener_label:after {
+  transform: rotate(45deg);
+  top: 70px; }
+
+.menu_opener:checked ~ .menu_opener_label:before {
+  transform: rotate(-45deg);
+  height: 50px;
+  left: 70px;
+  margin-top: 20px;
+  right: 0;
+  top: 50px;
+  transform: rotate(-45deg);
+  width: 10px; }
+
+.menu_opener_label {
+  background: #fff;
+  width: 150px;
+  height: 150px;
+  display: block;
+  cursor: pointer;
+  border-radius: 50%;
+  position: absolute;
+  top: 200px;
+  left: 200px;
+  z-index: 10; }
+
+.menu_opener_label:after {
+  background: #000 none repeat scroll 0 0;
+  content: "";
+  height: 50px;
+  left: 70px;
+  position: absolute;
+  top: 50px;
+  transition: all 0.4s ease 0s;
+  width: 10px; }
+
+.menu_opener_label:before {
+  position: absolute;
+  top: 90px;
+  left: 50px;
+  background: #000;
+  content: "";
+  width: 50px;
+  height: 0px;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease; }
+
+.barre_hamburger {
+  width: 50px;
+  height: 10px;
+  position: absolute;
+  top: 270px;
+  left: 250px;
+  background: #000;
+  z-index: 20;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease; }
+
+.link_general {
+  width: 100px;
+  height: 100px;
+  display: block;
+  border-radius: 50%;
+  position: absolute;
+  top: 225px;
+  left: 225px;
+  background: #ecf0f1;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease; }
+
+.link_blog {
+  background: url("../images/blogging.png") white no-repeat center center; }
+
+.link_website {
+  background: url("../images/websites.png") white no-repeat center center; }
+
+.link_settings {
+  background: url("../images/settings.png") white no-repeat center center; }
+
+.link_pages {
+  background: url("../images/web-page.png") white no-repeat center center; }
+
+.link_layout {
+  background: url("../images/layout.png") white no-repeat center center; }
+
+.link_content {
+  background: url("../images/content.png") white no-repeat center center; }
+
+.link_media {
+  background: url("../images/photo-camera.png") white no-repeat center center; }
+
+.link_users {
+  background: url("../images/student.png") white no-repeat center center; }
+
+.navbar-brand {
+  float: left;
+  height: 50px;
+  padding: 15px 15px;
+  font-size: 18px;
+  line-height: 20px; }
+
+.navbar-brand:focus, .navbar-brand:hover {
+  text-decoration: none; }
+
+.navbar-inverse .navbar-brand:focus, .navbar-inverse .navbar-brand:hover {
+  color: #fff;
+  background-color: transparent; }
+
+.navbar-inverse .navbar-brand {
+  color: #9d1007; }
+
+.two-mins .container-fluid {
+  padding-right: 15px !important;
+  padding-left: 15px !important; }
+

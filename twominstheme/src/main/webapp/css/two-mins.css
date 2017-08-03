@@ -244,3 +244,34 @@ h1 {
 .link_users {
 	background: url("../images/student.png") #fff no-repeat center center;
 }
+
+
+.navbar-brand {
+	float: left;
+	height: 50px;
+	padding: 15px 15px;
+	font-size: 18px;
+	line-height: 20px;
+}
+
+.navbar-brand:focus, .navbar-brand:hover {
+	text-decoration: none;
+}
+
+.navbar-inverse .navbar-brand:focus, .navbar-inverse .navbar-brand:hover {
+	color: #fff;
+	background-color: transparent;
+}
+
+.navbar-inverse .navbar-brand {
+	color: #9d1007;
+}
+
+.two-mins .container-fluid {
+	padding-right: 15px !important;
+	padding-left: 15px !important;
+}
+
+ul li .active {
+	font-size: medium;
+}
