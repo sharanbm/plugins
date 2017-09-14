@@ -16,7 +16,7 @@
 					Page has been created. Do some stuff with it.
 				</div>
 
-				<form name="createPage" id="createPage" action="${createPage}" method="post" class="">
+				<form name="createPage" id="createPage" action="${createPage}" method="post">
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="groupsList">Site Name:</label>
 						<div class="col-sm-4">

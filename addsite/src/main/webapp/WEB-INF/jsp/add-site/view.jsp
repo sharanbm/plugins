@@ -19,7 +19,7 @@
 		Your WebSite ${newSite.name} has been created. Do some stuff with it.
 	</div>
 </c:if>
-<div class="container">
+<div class="nav-container">
 	<input type="checkbox" id="menu_opener_id" class="menu_opener">
 	<label for="menu_opener_id" class="menu_opener_label"></label>
 	<div class="barre_hamburger"></div>
