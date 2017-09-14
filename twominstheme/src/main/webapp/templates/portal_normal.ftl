@@ -5,7 +5,7 @@
 <html class="${root_css_class}" dir="<@liferay.language key="lang.dir" />" lang="${w3c_language_id}">
 
 <head>
-	<title>ಏಪೋೀೋಲ ಪಾೀೋಿೇ - ${company_name}</title>
+	<title> - ${company_name}</title>
 
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 

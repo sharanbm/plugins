@@ -7,8 +7,10 @@
 <head>
     <title>$the_title - $company_name</title>
     <link rel="stylesheet" href="$css_folder/two-mins.css"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+#*<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">*#
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <meta content="initial-scale=1.0, width=device-width" name="viewport"/>
 
     $theme.include($top_head_include)
@@ -23,36 +25,42 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Two Mins</a>
+            <a class="navbar-brand" href="http://www.runningpanda.co.uk"><img
+                    src="$images_folder/2minutes-logo.png"/></a>
         </div>
-        #if ($has_navigation || $is_signed_in)
-            <ul class="nav navbar-nav" role="menubar">
-                #foreach ($nav_item in $nav_items)
-                    #set ($nav_item_attr_has_popup="")
-                    #set ($nav_item_attr_selected="")
-                    #set ($nav_item_css_class = "")
+    ##if ($has_navigation || $is_signed_in)
+    ##   <ul class="nav navbar-nav" role="menubar">
+    ##     #foreach ($nav_item in $nav_items)
+    ##       #set ($nav_item_attr_has_popup="")
+    ##     #set ($nav_item_attr_selected="")
+    ##   #set ($nav_item_css_class = "")
 
-                    #if ($nav_item.isSelected())
-                        #set ($nav_item_attr_selected="aria-selected='true'")
-                        #set ($nav_item_css_class = "active")
-                    #end
+    ## #if ($nav_item.isSelected())
+    ##   #set ($nav_item_attr_selected="aria-selected='true'")
+    ## #set ($nav_item_css_class = "active")
+    ##end
 
-                    #if ($nav_item.hasChildren())
-                        #set ($nav_item_attr_has_popup="aria-haspopup='true'")
-                    #end
+    ###if ($nav_item.hasChildren())
+    ##   #set ($nav_item_attr_has_popup="aria-haspopup='true'")
+    ###end
 
-                    <li class="$nav_item_css_class" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected
-                        role="presentation">
-                        <a aria-labelledby="layout_$nav_item.getLayoutId()"
-                           href="$nav_item.getURL()" $nav_item_attr_has_popup $nav_item.getTarget()
-                           role="menuitem"><span>$nav_item.icon() $nav_item.getName()</span></a>
-                    </li>
-                #end
-            </ul>
-        #end
+    ##<li class="$nav_item_css_class" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected
+    ##  role="presentation">
+    ##<a aria-labelledby="layout_$nav_item.getLayoutId()"
+    ## href="$nav_item.getURL()" $nav_item_attr_has_popup $nav_item.getTarget()
+    ##role="menuitem"><span>$nav_item.icon() $nav_item.getName()</span></a>
+    ##</li>
+    ###end
+    ##</ul>
+    ###end
         #if (!$is_signed_in)
-            <a data-redirect="$is_login_redirect_required" href="$sign_in_url" id="sign-in"
-               rel="nofollow">$sign_in_text</a>
+            <div class="pull-right btn-toolbar">
+                <a href="$sign_in_url" id="register" rel="nofollow" class="btn btn-link btn-large">
+                    <i class="fa fa-facebook"></i> | Sign in via Facebook</a>
+                <a href="$sign_in_url" id="register" rel="nofollow" class="btn btn-success btn-large">Sign Up</a>
+                <a data-redirect="$is_login_redirect_required" href="$sign_in_url" id="sign-in" rel="nofollow"
+                   class="btn btn-warning btn-large">$sign_in_text</a>
+            </div>
         #end
     </div>
 </nav>
