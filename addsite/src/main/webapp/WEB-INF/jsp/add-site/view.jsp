@@ -112,7 +112,7 @@
 		    $.each(obj, function(key, value) {
 			    $("#layouts").append(str.concat("<div class=\"radio\"><label><input type=\"radio\" name=").concat("selectedTemplate").concat(" id=")
 			            .concat(value._layoutTemplateId).concat(" value=" + value._layoutTemplateId).concat(">").concat(value._layoutTemplateId).concat("</label>")
-			            .concat("<img src="+value._thumbnailPath+" width=25 height=25 />").concat("<br />"));
+			            .concat("    ").concat("<img src="+value._thumbnailPath+" width=25 height=25 /></div>").concat("<br />"));
 		    });
 	    });
     });
