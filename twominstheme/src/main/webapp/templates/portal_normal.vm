@@ -7,9 +7,10 @@
 <head>
     <title>$the_title - $company_name</title>
     <link rel="stylesheet" href="$css_folder/two-mins.css"/>
+    <link rel="stylesheet" href="$css_folder/bootstrap.min.css"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-#*<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">*#
+
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <meta content="initial-scale=1.0, width=device-width" name="viewport"/>
 
@@ -22,11 +23,11 @@
 
     $theme.include($body_top_include)
 
-<nav class="navbar navbar-default">
+<nav class="navbar">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="http://www.runningpanda.co.uk"><img
-                    src="$images_folder/2minutes-logo.png"/></a>
+            <a href="http://www.runningpanda.co.uk"><img
+                    src="$images_folder/logo.png"/></a>
         </div>
     ##if ($has_navigation || $is_signed_in)
     ##   <ul class="nav navbar-nav" role="menubar">
@@ -54,12 +55,12 @@
     ##</ul>
     ###end
         #if (!$is_signed_in)
-            <div class="pull-right btn-toolbar">
-                <a href="$sign_in_url" id="register" rel="nofollow" class="btn btn-link btn-large">
+            <div class="pull-right btn-toolbar top-buffer">
+                <a href="$sign_in_url" id="register" rel="nofollow" class="btn btn-primary btn-sm">
                     <i class="fa fa-facebook"></i> | Sign in via Facebook</a>
-                <a href="$sign_in_url" id="register" rel="nofollow" class="btn btn-success btn-large">Sign Up</a>
+                <a href="$sign_in_url" id="register" rel="nofollow" class="btn btn-success btn-sm">Sign Up</a>
                 <a data-redirect="$is_login_redirect_required" href="$sign_in_url" id="sign-in" rel="nofollow"
-                   class="btn btn-warning btn-large">$sign_in_text</a>
+                   class="btn btn-warning btn-sm">$sign_in_text</a>
             </div>
         #end
     </div>
