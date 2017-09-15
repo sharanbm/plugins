@@ -25,13 +25,11 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.GroupConstants;
-import com.liferay.portal.model.Layout;
-import com.liferay.portal.model.LayoutConstants;
-import com.liferay.portal.model.LayoutTemplate;
+import com.liferay.portal.model.*;
 import com.liferay.portal.service.*;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.sites.util.SitesUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,194 +37,206 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
 
 @Controller
 @RequestMapping("VIEW")
 public class PortletViewController {
 
-	Log log = LogFactoryUtil.getLog(this.getClass());
+    Log log = LogFactoryUtil.getLog(this.getClass());
 
-	@RenderMapping
-	public String question(Model model) {
+    @RenderMapping
+    public String question(Model model, RenderRequest renderRequest) throws SystemException {
 
-		model.addAttribute("releaseInfo", ReleaseInfo.getReleaseInfo());
+        model.addAttribute("releaseInfo", ReleaseInfo.getReleaseInfo());
+        List<LayoutSetPrototype> layoutSetPrototypes = LayoutSetPrototypeLocalServiceUtil.getLayoutSetPrototypes(PortalUtil.getCompanyId(PortalUtil.getOriginalServletRequest(PortalUtil.getHttpServletRequest(renderRequest))));
 
-		return "add-site/view";
-	}
+        log.info(layoutSetPrototypes.size());
+        String json = "";
+        Gson gson = new GsonBuilder().create();
+        json = gson.toJson(layoutSetPrototypes).toString();
+        log.info(layoutSetPrototypes);
+        model.addAttribute("siteTemplates", json);
+        return "add-site/view";
+    }
 
-	@ActionMapping
-	public void createSite(ActionRequest actionRequest, Model model) {
+    @ActionMapping
+    public void createSite(ActionRequest actionRequest, Model model) {
 
-		log.info(ParamUtil.getString(actionRequest, "siteName"));
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        log.info(ParamUtil.getString(actionRequest, "siteName"));
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		String siteName = actionRequest.getParameter("siteName");
-		log.info("Site created : " + siteName);
+        String siteName = actionRequest.getParameter("siteName");
+        log.info("Site created : " + siteName);
+        String siteTemplateId = actionRequest.getParameter("siteTemplate");
+        long publicLayoutSetProtoTypeId = 0;
+        if (siteTemplateId != null) {
+            publicLayoutSetProtoTypeId = Long.parseLong(siteTemplateId);
+        }
 
-		Group site;
-		try {
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(Group.class.getName(), actionRequest);
-			serviceContext.setAddGroupPermissions(true);
-			serviceContext.setAddGuestPermissions(true);
-			site = GroupLocalServiceUtil.addGroup(
-				themeDisplay.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID, Group.class.getName(), ClassNameLocalServiceUtil.getClassNameId(Group.class),
-				GroupConstants.DEFAULT_LIVE_GROUP_ID, siteName, "description", GroupConstants.TYPE_SITE_OPEN, true,
-				GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, "", true, true, serviceContext);
-			model.addAttribute("newSite", site);
-		}
-		catch (PortalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        Group site;
+        try {
+            ServiceContext serviceContext = ServiceContextFactory.getInstance(Group.class.getName(), actionRequest);
+            serviceContext.setAddGroupPermissions(true);
+            serviceContext.setAddGuestPermissions(true);
+            site = GroupLocalServiceUtil.addGroup(
+                    themeDisplay.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID, Group.class.getName(), ClassNameLocalServiceUtil.getClassNameId(Group.class),
+                    GroupConstants.DEFAULT_LIVE_GROUP_ID, siteName, "description", GroupConstants.TYPE_SITE_OPEN, true,
+                    GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, "", true, true, serviceContext);
+            log.info(publicLayoutSetProtoTypeId);
+            log.info(actionRequest.getParameter("siteTemplate"));
 
-	@ActionMapping(params = {
-		"action=page"
-	})
-	public void createPage(ActionRequest actionRequest, Model model) {
+            log.info("site created : " + site.toString());
+            if (publicLayoutSetProtoTypeId > 0) {
+                SitesUtil.updateLayoutSetPrototypesLinks(site, publicLayoutSetProtoTypeId, publicLayoutSetProtoTypeId, true, false);
+            }
+            model.addAttribute("newSite", site);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		String groupsList = actionRequest.getParameter("groupsList");
-		String pageName = actionRequest.getParameter("pageName");
 
-		Layout layout;
-		try {
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
-			serviceContext.setAddGroupPermissions(true);
-			serviceContext.setAddGuestPermissions(true);
-			layout = LayoutLocalServiceUtil.addLayout(
-				themeDisplay.getUserId(), Long.parseLong(groupsList), false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, pageName, pageName, pageName,
-				LayoutConstants.TYPE_PORTLET, false, "/" + pageName, serviceContext);
-			model.addAttribute("page", layout);
-		}
-		catch (PortalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        } catch (PortalException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SystemException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	@ActionMapping(params = {
-		"action=updatePage"
-	})
-	public void updatePage(ActionRequest actionRequest, Model model) {
+    @ActionMapping(params = {
+            "action=page"
+    })
+    public void createPage(ActionRequest actionRequest, Model model) {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		String groupId = actionRequest.getParameter("layout_groupsList");
-		String pageId = actionRequest.getParameter("layout_pagesList");
-		String selectedTemplate = actionRequest.getParameter("selectedTemplate");
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        String groupsList = actionRequest.getParameter("groupsList");
+        String pageName = actionRequest.getParameter("pageName");
 
-		Layout layout;
-		try {
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
-			serviceContext.setAddGroupPermissions(true);
-			serviceContext.setAddGuestPermissions(true);
-			layout = LayoutLocalServiceUtil.getLayout(Long.parseLong(groupId), false, Long.parseLong(pageId));
-			UnicodeProperties unicodeProperties = layout.getTypeSettingsProperties();
-			unicodeProperties.setProperty("layout-template-id", selectedTemplate);
-			layout.setTypeSettingsProperties(unicodeProperties);
-			LayoutLocalServiceUtil.updateLayout(layout);
-			log.info(unicodeProperties.toString());
-			model.addAttribute("page", layout);
-		}
-		catch (PortalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+        Layout layout;
+        try {
+            ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
+            serviceContext.setAddGroupPermissions(true);
+            serviceContext.setAddGuestPermissions(true);
+            layout = LayoutLocalServiceUtil.addLayout(
+                    themeDisplay.getUserId(), Long.parseLong(groupsList), false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, pageName, pageName, pageName,
+                    LayoutConstants.TYPE_PORTLET, false, "/" + pageName, serviceContext);
+            model.addAttribute("page", layout);
+        } catch (PortalException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SystemException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	@ResourceMapping(value = "getPagesList")
-	public void getPagesForTheSelectedSite(ResourceRequest request, ResourceResponse response) {
+    @ActionMapping(params = {
+            "action=updatePage"
+    })
+    public void updatePage(ActionRequest actionRequest, Model model) {
 
-		log.info("inside resoruce serving method." + request.getParameter("selectedSite"));
-		List<Layout> pages = new ArrayList<Layout>();
-		String json = "";
-		try {
-			long siteId = Long.parseLong(request.getParameter("selectedSite"));
-			log.info(siteId);
-			pages = LayoutLocalServiceUtil.getLayouts(siteId, false);
-			json = JSONFactoryUtil.looseSerialize(pages);
-			log.info("just wanted to see the json " + json);
-			response.getPortletOutputStream().write(json.getBytes());
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-		}
-		catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+        String groupId = actionRequest.getParameter("layout_groupsList");
+        String pageId = actionRequest.getParameter("layout_pagesList");
+        String selectedTemplate = actionRequest.getParameter("selectedTemplate");
 
-	}
+        Layout layout;
+        try {
+            ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
+            serviceContext.setAddGroupPermissions(true);
+            serviceContext.setAddGuestPermissions(true);
+            layout = LayoutLocalServiceUtil.getLayout(Long.parseLong(groupId), false, Long.parseLong(pageId));
+            UnicodeProperties unicodeProperties = layout.getTypeSettingsProperties();
+            unicodeProperties.setProperty("layout-template-id", selectedTemplate);
+            layout.setTypeSettingsProperties(unicodeProperties);
+            LayoutLocalServiceUtil.updateLayout(layout);
+            log.info(unicodeProperties.toString());
+            model.addAttribute("page", layout);
+        } catch (PortalException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SystemException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	@ResourceMapping(value = "getLayoutList")
-	public void getLayoutTemplates(ResourceRequest request, ResourceResponse response) {
+    @ResourceMapping(value = "getPagesList")
+    public void getPagesForTheSelectedSite(ResourceRequest request, ResourceResponse response) {
 
-		log.info("inside getLayoutTemplates serving method.");
-		List<LayoutTemplate> layoutTemplates = new ArrayList<LayoutTemplate>();
-		String json = "";
-		try {
-			layoutTemplates = LayoutTemplateLocalServiceUtil.getLayoutTemplates();
-			log.info(layoutTemplates.toString());
-			Gson gson = new GsonBuilder().create();
-			json = gson.toJson(layoutTemplates).toString();
+        log.info("inside resoruce serving method." + request.getParameter("selectedSite"));
+        List<Layout> pages = new ArrayList<Layout>();
+        String json = "";
+        try {
+            long siteId = Long.parseLong(request.getParameter("selectedSite"));
+            log.info(siteId);
+            pages = LayoutLocalServiceUtil.getLayouts(siteId, false);
+            json = JSONFactoryUtil.looseSerialize(pages);
+            log.info("just wanted to see the json " + json);
+            response.getPortletOutputStream().write(json.getBytes());
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+        } catch (SystemException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-			log.info("just wanted to see the json " + json);
-			response.getPortletOutputStream().write(json.getBytes());
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    }
 
-	}
+    @ResourceMapping(value = "getLayoutList")
+    public void getLayoutTemplates(ResourceRequest request, ResourceResponse response) {
 
-	@ResourceMapping(value = "getGroupList")
-	public void serveResource(ResourceRequest request, ResourceResponse response) {
+        log.info("inside getLayoutTemplates serving method.");
+        List<LayoutTemplate> layoutTemplates = new ArrayList<LayoutTemplate>();
+        String json = "";
+        try {
+            layoutTemplates = LayoutTemplateLocalServiceUtil.getLayoutTemplates();
+            log.info(layoutTemplates.toString());
+            Gson gson = new GsonBuilder().create();
+            json = gson.toJson(layoutTemplates).toString();
 
-		log.info("inside resoruce serving method.");
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		List<Group> groups = new ArrayList<Group>();
-		String json = "";
-		try {
-			groups = GroupLocalServiceUtil.getUserGroups(themeDisplay.getUserId());
-			json = JSONFactoryUtil.looseSerialize(groups);
-			log.info("just wanted to see the json " + json);
-			response.getPortletOutputStream().write(json.getBytes());
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-		}
-		catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            log.info("just wanted to see the json " + json);
+            response.getPortletOutputStream().write(json.getBytes());
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-	}
+    }
+
+    @ResourceMapping(value = "getGroupList")
+    public void serveResource(ResourceRequest request, ResourceResponse response) {
+
+        log.info("inside resoruce serving method.");
+        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+        List<Group> groups = new ArrayList<Group>();
+        String json = "";
+        try {
+            groups = GroupLocalServiceUtil.getUserGroups(themeDisplay.getUserId());
+            json = JSONFactoryUtil.looseSerialize(groups);
+            log.info("just wanted to see the json " + json);
+            response.getPortletOutputStream().write(json.getBytes());
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+        } catch (SystemException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
 }
